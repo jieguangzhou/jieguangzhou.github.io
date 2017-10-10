@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="链接论文 Neural Machine Translation by Jointly Learning to Align and Translate数据集  WMT14">
+<meta name="description" content="摘要　　在基于encoder-decoder的框架中，把source sentence 编码成一个固定长度的向量丢给decoder解码来生成翻译．在这个文章中，作者猜想用一个固定长度的向量是这个框架的瓶颈，然后提出了一种软对齐方法，使得模型可以在预测单词的时候可以检索对自身重要的词，就是在预测apple时候让模型可以在原句中找到苹果这个关键的词，然后翻译． 模型结构 　　在基于原来的encod">
 <meta name="keywords" content="seq2seq">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Neural Machine Translation by Jointly Learning to Align and Translate">
 <meta property="og:url" content="http://yoursite.com/2017/10/09/Neural-Machine-Translation-by-Jointly-Learning-to-Align-and-Translate/index.html">
 <meta property="og:site_name" content="JG">
-<meta property="og:description" content="链接论文 Neural Machine Translation by Jointly Learning to Align and Translate数据集  WMT14">
+<meta property="og:description" content="摘要　　在基于encoder-decoder的框架中，把source sentence 编码成一个固定长度的向量丢给decoder解码来生成翻译．在这个文章中，作者猜想用一个固定长度的向量是这个框架的瓶颈，然后提出了一种软对齐方法，使得模型可以在预测单词的时候可以检索对自身重要的词，就是在预测apple时候让模型可以在原句中找到苹果这个关键的词，然后翻译． 模型结构 　　在基于原来的encod">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-09T10:43:23.666Z">
+<meta property="og:updated_time" content="2017-10-10T06:12:28.794Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Neural Machine Translation by Jointly Learning to Align and Translate">
-<meta name="twitter:description" content="链接论文 Neural Machine Translation by Jointly Learning to Align and Translate数据集  WMT14">
+<meta name="twitter:description" content="摘要　　在基于encoder-decoder的框架中，把source sentence 编码成一个固定长度的向量丢给decoder解码来生成翻译．在这个文章中，作者猜想用一个固定长度的向量是这个框架的瓶颈，然后提出了一种软对齐方法，使得模型可以在预测单词的时候可以检索对自身重要的词，就是在预测apple时候让模型可以在原句中找到苹果这个关键的词，然后翻译． 模型结构 　　在基于原来的encod">
 
 
 
@@ -353,8 +353,13 @@
       
 
       
-        <p><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script></p>
-<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><p><a href="https://arxiv.org/abs/1409.0473" target="_blank" rel="external">论文 Neural Machine Translation by Jointly Learning to Align and Translate</a><br><a href="https://nlp.stanford.edu/projects/nmt/data/wmt14.en-de/" target="_blank" rel="external">数据集  WMT14</a></p>
+        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>　　在基于encoder-decoder的框架中，把source sentence 编码成一个固定长度的向量丢给decoder解码来生成翻译．在这个文章中，作者猜想用一个固定长度的向量是这个框架的瓶颈，然后提出了一种软对齐方法，使得模型可以在预测单词的时候可以检索对自身重要的词，就是在预测apple时候让模型可以在原句中找到苹果这个关键的词，然后翻译．</p>
+<h2 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h2><p> 　　在基于原来的<a href="/2017/10/09/Sequence-to-Sequence-Learning-with-Neural-Networks/">encoder-decoder</a>框架的基础上，模型引入了对齐的结构(注意力机制)．<br> 　　定义条件概率<br>   $$p(y_i|y_1,…,y_(i-1), X)=g(y_{i-1}, s_i, c_i)$$<br> 　　\(s_i\)是一个decoder中time\(i\)的hidden state,可以由这个得到<br>   $$s_i=f(s_{i-1},y_{i-1},c_i)$$<br>　　与之前encoder和decoder不一样，\(c_i\)对于每一个\(y_i\)都是不一样的.也就是每一个\(y\)的生成所参照的\(c\)都是不一样的，那么\(c_i\)的计算方法可以用一下公式计算：</p>
+<p> $$c_i=\sum_{j=1}^{T_x} a_{ij}h_j$$<br>　　其中\(a_{ij}\)可理解为第j个词生成时对于第i个词的关注度．计算方式如下．<br>$$a_{ij}=\frac{exp(e_{ij})}{\sum_{k=1}^{T_x}exp(e_{ij})}$$</p>
+<p>$$e_{ij}=a(s_{i-1}, h_j)$$<br>　　这里\(a(s_{i-1}, h_j)\)可以的计算公式也就是<br>  $$e_{ij}=v_a^T tanh(W_as_{i-1}+U_ah_j)$$<br>  其中\(u_a\in R^{ n’}\), \(W_a\in R^{ n’<em>n}\), \(U_a\in R^{ n’</em>2n}\)</p>
+<h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><p><a href="https://arxiv.org/pdf/1409.0473.pdf" target="_blank" rel="external">论文 Neural Machine Translation by Jointly Learning to Align and Translate</a><br><a href="https://nlp.stanford.edu/projects/nmt/data/wmt14.en-de/" target="_blank" rel="external">数据集  WMT14</a></p>
 
       
     </div>
@@ -531,7 +536,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#链接"><span class="nav-number">1.</span> <span class="nav-text">链接</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型结构"><span class="nav-number">2.</span> <span class="nav-text">模型结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链接"><span class="nav-number">3.</span> <span class="nav-text">链接</span></a></li></ol></div>
             
 
           </div>

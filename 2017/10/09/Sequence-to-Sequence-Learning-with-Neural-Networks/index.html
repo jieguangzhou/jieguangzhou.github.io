@@ -88,8 +88,7 @@
 <meta property="og:description" content="摘要　　深度神经网络在不同的任务上都表现得很强，但是他却不能被用于将一个序列映射成另外一个序列.在这篇文章，作者们提出了一种端到端的方法来从一个序列学习另外一个序列．方法是:(Encode)用多层的LSTM来将一个输入序列转化为一个固定长度的向量，(Decode)然后再把这个向量丢给另外的LSTM作为输入，输出一个新的序列． 　　文章基于英语译法语的翻译任务来做实验，结果挺好的．还说了一个tr">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/img/seq2seq_encoder-decoder.png">
-<meta property="og:image" content="http://www.forkosh.com/mathtex.cgi? \Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}">
-<meta property="og:updated_time" content="2017-10-10T01:07:15.588Z">
+<meta property="og:updated_time" content="2017-10-10T03:41:39.660Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Sequence to Sequence Learning with Neural Networks">
 <meta name="twitter:description" content="摘要　　深度神经网络在不同的任务上都表现得很强，但是他却不能被用于将一个序列映射成另外一个序列.在这篇文章，作者们提出了一种端到端的方法来从一个序列学习另外一个序列．方法是:(Encode)用多层的LSTM来将一个输入序列转化为一个固定长度的向量，(Decode)然后再把这个向量丢给另外的LSTM作为输入，输出一个新的序列． 　　文章基于英语译法语的翻译任务来做实验，结果挺好的．还说了一个tr">
@@ -363,10 +362,10 @@
 <p> 　　图中，给定序列＂ABC＂，生成一个序列＂WXYZ　&lt; EOS &gt;＂,其中&lt; EOS &gt;为结束符号，没有实际意义，用于标记句子结束．</p>
 <h3 id="计算过程"><a href="#计算过程" class="headerlink" title="计算过程"></a>计算过程</h3><p>给定序列\(x_1,…,x_T\)，通过lstm计算得到最后的hidden state \(v\)<br>$$v=lstm(x_1,…,x_T)$$<br>将\(v\)作为decoder的初始状态init_state，可以计算概率\(y_1,…, y_T\)<br>$$p(y_1,…,y_{T’}|x_1,…,x_T)=\prod_{t=1}^{T’}p(y_t|v,y_1,…,y_{t-1})$$</p>
 <p>LSTM可以用来估计条件概率\(p(y_1,…,y_{T’}|x_1,…,x_T)\)，其中\(x_1,…,x_T\)是输入序列，\(y_1,…, y_{T’}\)是对应的正确的输出序列．</p>
-<p>那么对于(p(y_t|v,y_1,…,y_{t-1})\),所对应的分布可以表示为在词典中所有的词做softmax后得到的值．_</p>
-<h3 id="目标函数"><a href="#目标函数" class="headerlink" title="目标函数"></a>目标函数</h3><p>实验的目的是在大量的句子对上训练一个深度LSTM，目标函数定义为<br>$$1/|D| \sum_{(T,S)\in D}log\ p(T|S)$$</p>
-<p>D是训练集合中所有的句子，当训练完后，可以通过LSTM，在给定句子S时得到句子\(\hat T\):<br>$$\hat T=argmax_T\ p(T|S)$$<br><img src="http://www.forkosh.com/mathtex.cgi? \Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}"><br>在这个解码过程中，可以用beam search 来使得得到的结果更好．</p>
-<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><p><a href="https://arxiv.org/abs/1409.3215" target="_blank" rel="external">论文 Sequence to Sequence Learning with Neural Networks</a></p>
+<p>那么对于\(p(y_t|v,y_1,…,y_{t-1})\),所对应的分布可以表示为在词典中所有的词做softmax后得到的值．_</p>
+<h3 id="目标函数"><a href="#目标函数" class="headerlink" title="目标函数"></a>目标函数</h3><p>实验的目的是在大量的句子对上训练一个深度LSTM，目标函数定义为<br>$$1/|D| \sum_{(T,S)\in D}log p(T|S)$$</p>
+<p>D是训练集合中所有的句子，当训练完后，可以通过LSTM，在给定句子S时得到句子\(\hat T\):<br>$$\hat T=argmax_T p(T|S)$$<br>在这个解码过程中，可以用beam search 来使得得到的结果更好．</p>
+<h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><p><a href="https://arxiv.org/pdf/1409.3215.pdf" target="_blank" rel="external">论文 Sequence to Sequence Learning with Neural Networks</a></p>
 <p><a href="https://nlp.stanford.edu/projects/nmt/data/wmt14.en-de/" target="_blank" rel="external">数据集  WMT14</a></p>
 
       
@@ -536,7 +535,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型介绍"><span class="nav-number">2.</span> <span class="nav-text">模型介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模型结构"><span class="nav-number">2.1.</span> <span class="nav-text">模型结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算过程"><span class="nav-number">2.2.</span> <span class="nav-text">计算过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目标函数"><span class="nav-number">2.3.</span> <span class="nav-text">目标函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链接"><span class="nav-number">2.4.</span> <span class="nav-text">链接</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型介绍"><span class="nav-number">2.</span> <span class="nav-text">模型介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模型结构"><span class="nav-number">2.1.</span> <span class="nav-text">模型结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算过程"><span class="nav-number">2.2.</span> <span class="nav-text">计算过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目标函数"><span class="nav-number">2.3.</span> <span class="nav-text">目标函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链接"><span class="nav-number">3.</span> <span class="nav-text">链接</span></a></li></ol></div>
             
 
           </div>
