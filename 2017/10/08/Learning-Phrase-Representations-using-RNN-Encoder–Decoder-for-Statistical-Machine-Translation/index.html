@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="seq2seq,nmt," />
 
 
 
@@ -79,17 +79,20 @@
 
 
 
-<meta name="description" content="Neural Machine Translation of Rare Words with Subword Units将BPE用于处理翻译系统中的OOV问题．">
+<meta name="description" content="这个文章首次提出了基于RNN Encoder-Decoder框架的NMT模型 RNN Encoder-Decoder1 Encoder　　首先将源句子的每个词转换为500维的词向量\(e(x_i)\in R^{500}\)，encoder使用GRU,hidden units为1000，在每一个时刻有hidden state$$h_j^{&amp;lt; t &amp;gt;}=z_jh_j^{&amp;lt; t">
+<meta name="keywords" content="seq2seq,nmt">
 <meta property="og:type" content="article">
-<meta property="og:title" content="papers">
-<meta property="og:url" content="http://yoursite.com/1111/10/11/papers/index.html">
+<meta property="og:title" content="Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation">
+<meta property="og:url" content="http://yoursite.com/2017/10/08/Learning-Phrase-Representations-using-RNN-Encoder–Decoder-for-Statistical-Machine-Translation/index.html">
 <meta property="og:site_name" content="JG">
-<meta property="og:description" content="Neural Machine Translation of Rare Words with Subword Units将BPE用于处理翻译系统中的OOV问题．">
+<meta property="og:description" content="这个文章首次提出了基于RNN Encoder-Decoder框架的NMT模型 RNN Encoder-Decoder1 Encoder　　首先将源句子的每个词转换为500维的词向量\(e(x_i)\in R^{500}\)，encoder使用GRU,hidden units为1000，在每一个时刻有hidden state$$h_j^{&amp;lt; t &amp;gt;}=z_jh_j^{&amp;lt; t">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-11T02:56:57.135Z">
+<meta property="og:image" content="http://yoursite.com/img/RNN%20Encoder-Decoder.png">
+<meta property="og:updated_time" content="2017-10-16T03:54:21.699Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="papers">
-<meta name="twitter:description" content="Neural Machine Translation of Rare Words with Subword Units将BPE用于处理翻译系统中的OOV问题．">
+<meta name="twitter:title" content="Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation">
+<meta name="twitter:description" content="这个文章首次提出了基于RNN Encoder-Decoder框架的NMT模型 RNN Encoder-Decoder1 Encoder　　首先将源句子的每个词转换为500维的词向量\(e(x_i)\in R^{500}\)，encoder使用GRU,hidden units为1000，在每一个时刻有hidden state$$h_j^{&amp;lt; t &amp;gt;}=z_jh_j^{&amp;lt; t">
+<meta name="twitter:image" content="http://yoursite.com/img/RNN%20Encoder-Decoder.png">
 
 
 
@@ -119,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/1111/10/11/papers/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/10/08/Learning-Phrase-Representations-using-RNN-Encoder–Decoder-for-Statistical-Machine-Translation/"/>
 
 
 
 
 
-  <title>papers | JG</title>
+  <title>Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation | JG</title>
   
 
 
@@ -252,7 +255,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/1111/10/11/papers/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Learning-Phrase-Representations-using-RNN-Encoder–Decoder-for-Statistical-Machine-Translation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="jieguangzhou">
@@ -269,7 +272,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">papers</h1>
+          <h1 class="post-title" itemprop="name headline">Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation</h1>
         
 
         <div class="post-meta">
@@ -281,8 +284,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="1111-10-11T10:51:02+08:00">
-                1111-10-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T10:15:51+08:00">
+                2017-10-08
               </time>
             
 
@@ -304,8 +307,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/计划/" itemprop="url" rel="index">
-                    <span itemprop="name">计划</span>
+                  <a href="/categories/论文阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">论文阅读</span>
                   </a>
                 </span>
 
@@ -315,8 +318,8 @@
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/计划/paper/" itemprop="url" rel="index">
-                    <span itemprop="name">paper</span>
+                  <a href="/categories/论文阅读/笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">笔记</span>
                   </a>
                 </span>
 
@@ -326,8 +329,6 @@
             </span>
           
 
-          
-            
           
 
           
@@ -352,9 +353,15 @@
       
 
       
-        <hr>
-<p><a href="https://arxiv.org/abs/1508.07909" target="_blank" rel="external">Neural Machine Translation of Rare Words with Subword Units</a><br>将BPE用于处理翻译系统中的OOV问题．</p>
-<hr>
+        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<p>　　这个文章首次提出了基于RNN Encoder-Decoder框架的NMT模型<br><img src="/img/RNN Encoder-Decoder.png" alt="RNN Encoder-Decoder"></p>
+<h2 id="RNN-Encoder-Decoder"><a href="#RNN-Encoder-Decoder" class="headerlink" title="RNN Encoder-Decoder"></a>RNN Encoder-Decoder</h2><h3 id="1-Encoder"><a href="#1-Encoder" class="headerlink" title="1 Encoder"></a>1 Encoder</h3><p>　　首先将源句子的每个词转换为500维的词向量\(e(x_i)\in R^{500}\)，encoder使用GRU,hidden units为1000，在每一个时刻有hidden state<br>$$h_j^{&lt; t &gt;}=z_jh_j^{&lt; t-1 &gt;}+(1-z_j)\hat h_j^{&lt; t &gt;}$$<br>　　其中<br>$$\hat h_j^{&lt; t &gt;}=tanh([\mathbf We(x_t)]_j+[\mathbf U(\mathbf r\odot \mathbf h_{&lt; t-1 &gt;})]_j)$$ $$z_j=\sigma([\mathbf W_ze(x_t)]_j]+[\mathbf U_z\mathbf h_{&lt; t-1 &gt;}]_j)$$ $$r_j=\sigma([\mathbf W_re(x_t)]_j)+[\mathbf U_r\mathbf h_{&lt; t-1 &gt;}]_j)$$</p>
+<p>　　在最后一个step计算完\(h\)之后，源句子的信息表示\(c\)为<br>$$\mathbf c=tanh(\mathbf V\mathbf h^{&lt; N &gt;})$$</p>
+<h3 id="2-Dncoder"><a href="#2-Dncoder" class="headerlink" title="2 Dncoder"></a>2 Dncoder</h3><p>　　deocder的hidden state可以用这个初始化<br>$$\mathbf h’^0=tanh(\mathbf V’\mathbf c)$$<br>　　那么对于每个step的hidden state,可以由以下公式得到<br>$$h_j’^{&lt; t &gt;}=z_j’h_j’^{&lt; t-1 &gt;}+(1-z_j)\hat h_j’^{&lt; t &gt;}$$<br>其中<br>$$\hat h_j’^{&lt; t &gt;}=tanh([\mathbf W’e(y_{t-1})]_j+[\mathbf U\mathbf {h_{&lt; t-1 &gt;}]_j+Cc}])$$ $$z_j’=\sigma([\mathbf W’_ze(y_{t-1})]_j]+[\mathbf U’_z\mathbf h’_{&lt; t-1 &gt;}]_j+\mathbf {[C_zc]_j})$$ $$r_j’=\sigma([\mathbf W’_re(y_{t-1})]_j)+[\mathbf U’_r\mathbf h’_{&lt; t-1 &gt;}]_j+\mathbf {[C_rc]_j})$$<br>  \(e(y_0)\)是一个全0向量，与encoder类似下\(e(y)\)是词向量．encoder是将句子编码，decoder不一样，它要生成句子，在每一个time \(t\)，decoder生成第\(j\)个词的方法为<br>  $$p(y_{t,j}=1|y_{t-1},…,y_1,X)=\frac {exp(g_js_{&lt; t &gt;})}{\sum_{j’=1}^Kexp(g_{j’}s_{&lt; t &gt;})}$$<br>  其中<br>  $$s_i^{&lt; t &gt;}=max\lbrace s_{2i-1}’^{&lt; t &gt;},s_{2i}’^{&lt; t &gt;}\rbrace $$ $$s’^{&lt; t &gt;}=\mathbf {O_hh’^{&lt; t &gt;}+o_yy_{t-1}+o_cc}$$<br>　　\(s_i^{&lt; t &gt;}\)可以看作是一个\(maxout\)．为了计算效率，将一个的输出权重矩阵\(\mathbf G\)替换为两个矩阵的点乘<br>$$\mathbf {G=G_lG_r}$$</p>
+<h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><p><a href="https://arxiv.org/abs/1406.1078" target="_blank" rel="external">论文 Learning Phrase Representations using RNN Encoder–Decoder for Statistical</a></p>
+<p><a href="https://nlp.stanford.edu/projects/nmt/data/wmt14.en-de/" target="_blank" rel="external">数据集  WMT14</a></p>
+<h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>所有数据，图表均来源于论文．</p>
 
       
     </div>
@@ -369,6 +376,14 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/seq2seq/" rel="tag"># seq2seq</a>
+          
+            <a href="/tags/nmt/" rel="tag"># nmt</a>
+          
+        </div>
       
 
       
@@ -416,10 +431,6 @@
 
           
 
-  
-
-
-
         </div>
         
           
@@ -439,8 +450,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -455,7 +475,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -502,6 +522,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#RNN-Encoder-Decoder"><span class="nav-number">1.</span> <span class="nav-text">RNN Encoder-Decoder</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Encoder"><span class="nav-number">1.1.</span> <span class="nav-text">1 Encoder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Dncoder"><span class="nav-number">1.2.</span> <span class="nav-text">2 Dncoder</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链接"><span class="nav-number">2.</span> <span class="nav-text">链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注释"><span class="nav-number">3.</span> <span class="nav-text">注释</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -689,6 +725,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 
