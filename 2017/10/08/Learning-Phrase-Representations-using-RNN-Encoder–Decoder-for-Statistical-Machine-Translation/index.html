@@ -88,7 +88,7 @@
 <meta property="og:description" content="这个文章首次提出了基于RNN Encoder-Decoder框架的NMT模型 RNN Encoder-Decoder1 Encoder　　首先将源句子的每个词转换为500维的词向量\(e(x_i)\in R^{500}\)，encoder使用GRU,hidden units为1000，在每一个时刻有hidden state$$h_j^{&amp;lt; t &amp;gt;}=z_jh_j^{&amp;lt; t">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/img/RNN%20Encoder-Decoder.png">
-<meta property="og:updated_time" content="2017-10-16T03:54:21.699Z">
+<meta property="og:updated_time" content="2017-10-16T10:20:19.370Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation">
 <meta name="twitter:description" content="这个文章首次提出了基于RNN Encoder-Decoder框架的NMT模型 RNN Encoder-Decoder1 Encoder　　首先将源句子的每个词转换为500维的词向量\(e(x_i)\in R^{500}\)，encoder使用GRU,hidden units为1000，在每一个时刻有hidden state$$h_j^{&amp;lt; t &amp;gt;}=z_jh_j^{&amp;lt; t">
@@ -358,7 +358,7 @@
 <p>　　这个文章首次提出了基于RNN Encoder-Decoder框架的NMT模型<br><img src="/img/RNN Encoder-Decoder.png" alt="RNN Encoder-Decoder"></p>
 <h2 id="RNN-Encoder-Decoder"><a href="#RNN-Encoder-Decoder" class="headerlink" title="RNN Encoder-Decoder"></a>RNN Encoder-Decoder</h2><h3 id="1-Encoder"><a href="#1-Encoder" class="headerlink" title="1 Encoder"></a>1 Encoder</h3><p>　　首先将源句子的每个词转换为500维的词向量\(e(x_i)\in R^{500}\)，encoder使用GRU,hidden units为1000，在每一个时刻有hidden state<br>$$h_j^{&lt; t &gt;}=z_jh_j^{&lt; t-1 &gt;}+(1-z_j)\hat h_j^{&lt; t &gt;}$$<br>　　其中<br>$$\hat h_j^{&lt; t &gt;}=tanh([\mathbf We(x_t)]_j+[\mathbf U(\mathbf r\odot \mathbf h_{&lt; t-1 &gt;})]_j)$$ $$z_j=\sigma([\mathbf W_ze(x_t)]_j]+[\mathbf U_z\mathbf h_{&lt; t-1 &gt;}]_j)$$ $$r_j=\sigma([\mathbf W_re(x_t)]_j)+[\mathbf U_r\mathbf h_{&lt; t-1 &gt;}]_j)$$</p>
 <p>　　在最后一个step计算完\(h\)之后，源句子的信息表示\(c\)为<br>$$\mathbf c=tanh(\mathbf V\mathbf h^{&lt; N &gt;})$$</p>
-<h3 id="2-Dncoder"><a href="#2-Dncoder" class="headerlink" title="2 Dncoder"></a>2 Dncoder</h3><p>　　deocder的hidden state可以用这个初始化<br>$$\mathbf h’^0=tanh(\mathbf V’\mathbf c)$$<br>　　那么对于每个step的hidden state,可以由以下公式得到<br>$$h_j’^{&lt; t &gt;}=z_j’h_j’^{&lt; t-1 &gt;}+(1-z_j)\hat h_j’^{&lt; t &gt;}$$<br>其中<br>$$\hat h_j’^{&lt; t &gt;}=tanh([\mathbf W’e(y_{t-1})]_j+[\mathbf U\mathbf {h_{&lt; t-1 &gt;}]_j+Cc}])$$ $$z_j’=\sigma([\mathbf W’_ze(y_{t-1})]_j]+[\mathbf U’_z\mathbf h’_{&lt; t-1 &gt;}]_j+\mathbf {[C_zc]_j})$$ $$r_j’=\sigma([\mathbf W’_re(y_{t-1})]_j)+[\mathbf U’_r\mathbf h’_{&lt; t-1 &gt;}]_j+\mathbf {[C_rc]_j})$$<br>  \(e(y_0)\)是一个全0向量，与encoder类似下\(e(y)\)是词向量．encoder是将句子编码，decoder不一样，它要生成句子，在每一个time \(t\)，decoder生成第\(j\)个词的方法为<br>  $$p(y_{t,j}=1|y_{t-1},…,y_1,X)=\frac {exp(g_js_{&lt; t &gt;})}{\sum_{j’=1}^Kexp(g_{j’}s_{&lt; t &gt;})}$$<br>  其中<br>  $$s_i^{&lt; t &gt;}=max\lbrace s_{2i-1}’^{&lt; t &gt;},s_{2i}’^{&lt; t &gt;}\rbrace $$ $$s’^{&lt; t &gt;}=\mathbf {O_hh’^{&lt; t &gt;}+o_yy_{t-1}+o_cc}$$<br>　　\(s_i^{&lt; t &gt;}\)可以看作是一个\(maxout\)．为了计算效率，将一个的输出权重矩阵\(\mathbf G\)替换为两个矩阵的点乘<br>$$\mathbf {G=G_lG_r}$$</p>
+<h3 id="2-Decoder"><a href="#2-Decoder" class="headerlink" title="2 Decoder"></a>2 Decoder</h3><p>　　deocder的hidden state可以用这个初始化<br>$$\mathbf h’^0=tanh(\mathbf V’\mathbf c)$$<br>　　那么对于每个step的hidden state,可以由以下公式得到<br>$$h_j’^{&lt; t &gt;}=z_j’h_j’^{&lt; t-1 &gt;}+(1-z_j)\hat h_j’^{&lt; t &gt;}$$<br>其中<br>$$\hat h_j’^{&lt; t &gt;}=tanh([\mathbf W’e(y_{t-1})]_j+[\mathbf U\mathbf {h_{&lt; t-1 &gt;}]_j+Cc}])$$ $$z_j’=\sigma([\mathbf W’_ze(y_{t-1})]_j]+[\mathbf U’_z\mathbf h’_{&lt; t-1 &gt;}]_j+\mathbf {[C_zc]_j})$$ $$r_j’=\sigma([\mathbf W’_re(y_{t-1})]_j)+[\mathbf U’_r\mathbf h’_{&lt; t-1 &gt;}]_j+\mathbf {[C_rc]_j})$$<br>  \(e(y_0)\)是一个全0向量，与encoder类似下\(e(y)\)是词向量．encoder是将句子编码，decoder不一样，它要生成句子，在每一个time \(t\)，decoder生成第\(j\)个词的方法为<br>  $$p(y_{t,j}=1|y_{t-1},…,y_1,X)=\frac {exp(g_js_{&lt; t &gt;})}{\sum_{j’=1}^Kexp(g_{j’}s_{&lt; t &gt;})}$$<br>  其中<br>  $$s_i^{&lt; t &gt;}=max\lbrace s_{2i-1}’^{&lt; t &gt;},s_{2i}’^{&lt; t &gt;}\rbrace $$ $$s’^{&lt; t &gt;}=\mathbf {O_hh’^{&lt; t &gt;}+o_yy_{t-1}+o_cc}$$<br>　　\(s_i^{&lt; t &gt;}\)可以看作是一个\(maxout\)．为了计算效率，将一个的输出权重矩阵\(\mathbf G\)替换为两个矩阵的点乘<br>$$\mathbf {G=G_lG_r}$$</p>
 <h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><p><a href="https://arxiv.org/abs/1406.1078" target="_blank" rel="external">论文 Learning Phrase Representations using RNN Encoder–Decoder for Statistical</a></p>
 <p><a href="https://nlp.stanford.edu/projects/nmt/data/wmt14.en-de/" target="_blank" rel="external">数据集  WMT14</a></p>
 <h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>所有数据，图表均来源于论文．</p>
@@ -394,14 +394,18 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/10/01/papers/" rel="next" title="papers">
+                <i class="fa fa-chevron-left"></i> papers
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/10/09/Sequence-to-Sequence-Learning-with-Neural-Networks/" rel="prev" title="Sequence to Sequence Learning with Neural Networks">
-                Sequence to Sequence Learning with Neural Networks <i class="fa fa-chevron-right"></i>
+              <a href="/2017/10/09/Neural-Machine-Translation-by-Jointly-Learning-to-Align-and-Translate/" rel="prev" title="Neural Machine Translation by Jointly Learning to Align and Translate">
+                Neural Machine Translation by Jointly Learning to Align and Translate <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -475,7 +479,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -497,7 +501,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -532,7 +536,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#RNN-Encoder-Decoder"><span class="nav-number">1.</span> <span class="nav-text">RNN Encoder-Decoder</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Encoder"><span class="nav-number">1.1.</span> <span class="nav-text">1 Encoder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Dncoder"><span class="nav-number">1.2.</span> <span class="nav-text">2 Dncoder</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链接"><span class="nav-number">2.</span> <span class="nav-text">链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注释"><span class="nav-number">3.</span> <span class="nav-text">注释</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#RNN-Encoder-Decoder"><span class="nav-number">1.</span> <span class="nav-text">RNN Encoder-Decoder</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Encoder"><span class="nav-number">1.1.</span> <span class="nav-text">1 Encoder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Decoder"><span class="nav-number">1.2.</span> <span class="nav-text">2 Decoder</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链接"><span class="nav-number">2.</span> <span class="nav-text">链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注释"><span class="nav-number">3.</span> <span class="nav-text">注释</span></a></li></ol></div>
             
 
           </div>
