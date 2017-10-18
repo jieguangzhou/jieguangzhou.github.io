@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="seq2seq,nmt," />
+  <meta name="keywords" content="seq2seq,mnt," />
 
 
 
@@ -79,24 +79,20 @@
 
 
 
-<meta name="description" content="摘要　　Google推出了一个NMT系统，叫GNMT,文章讲述了这个系统的详情． 模型结构　　模型包括三个部分：encoder network, decoder network, attention network.　encoder将一个句子转换为一组向量，每一个symbol转化为一个向量，decoder根据这组向量在每个time生成一个symbol，直到生成结束符号EOS．在decoder解">
-<meta name="keywords" content="seq2seq,nmt">
+<meta name="description" content="摘要　　深度神经网络在不同的任务上都表现得很强，但是他却不能被用于将一个序列映射成另外一个序列.在这篇文章，作者们提出了一种端到端的方法来从一个序列学习另外一个序列．方法是:(Encode)用多层的LSTM来将一个输入序列转化为一个固定长度的向量，(Decode)然后再把这个向量丢给另外的LSTM作为输入，输出一个新的序列． 　　文章基于英语译法语的翻译任务来做实验，结果挺好的．还说了一个tr">
+<meta name="keywords" content="seq2seq,mnt">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Google’s Neural Machine Translation System: Bridging the Gap">
-<meta property="og:url" content="http://yoursite.com/2017/10/11/Google’s-Neural-Machine-Translation-System-Bridging-the-Gap/index.html">
+<meta property="og:title" content="Sequence to Sequence Learning with Neural Networks">
+<meta property="og:url" content="http://yoursite.com/2017/10/09/Sequence-to-Sequence-Learning-with-Neural-Networks/index.html">
 <meta property="og:site_name" content="JG">
-<meta property="og:description" content="摘要　　Google推出了一个NMT系统，叫GNMT,文章讲述了这个系统的详情． 模型结构　　模型包括三个部分：encoder network, decoder network, attention network.　encoder将一个句子转换为一组向量，每一个symbol转化为一个向量，decoder根据这组向量在每个time生成一个symbol，直到生成结束符号EOS．在decoder解">
+<meta property="og:description" content="摘要　　深度神经网络在不同的任务上都表现得很强，但是他却不能被用于将一个序列映射成另外一个序列.在这篇文章，作者们提出了一种端到端的方法来从一个序列学习另外一个序列．方法是:(Encode)用多层的LSTM来将一个输入序列转化为一个固定长度的向量，(Decode)然后再把这个向量丢给另外的LSTM作为输入，输出一个新的序列． 　　文章基于英语译法语的翻译任务来做实验，结果挺好的．还说了一个tr">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/img/GNMT.png">
-<meta property="og:image" content="http://yoursite.com/img/ResidualConections.png">
-<meta property="og:image" content="http://yoursite.com/img/%20Bi-directional%20Encoder%20for%20First%20Layer.png">
-<meta property="og:image" content="http://yoursite.com/img/ab1.png">
-<meta property="og:image" content="http://yoursite.com/img/ab2.png">
-<meta property="og:updated_time" content="2017-10-11T08:44:42.975Z">
+<meta property="og:image" content="http://yoursite.com/img/seq2seq_encoder-decoder.png">
+<meta property="og:updated_time" content="2017-10-18T07:04:35.717Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Google’s Neural Machine Translation System: Bridging the Gap">
-<meta name="twitter:description" content="摘要　　Google推出了一个NMT系统，叫GNMT,文章讲述了这个系统的详情． 模型结构　　模型包括三个部分：encoder network, decoder network, attention network.　encoder将一个句子转换为一组向量，每一个symbol转化为一个向量，decoder根据这组向量在每个time生成一个symbol，直到生成结束符号EOS．在decoder解">
-<meta name="twitter:image" content="http://yoursite.com/img/GNMT.png">
+<meta name="twitter:title" content="Sequence to Sequence Learning with Neural Networks">
+<meta name="twitter:description" content="摘要　　深度神经网络在不同的任务上都表现得很强，但是他却不能被用于将一个序列映射成另外一个序列.在这篇文章，作者们提出了一种端到端的方法来从一个序列学习另外一个序列．方法是:(Encode)用多层的LSTM来将一个输入序列转化为一个固定长度的向量，(Decode)然后再把这个向量丢给另外的LSTM作为输入，输出一个新的序列． 　　文章基于英语译法语的翻译任务来做实验，结果挺好的．还说了一个tr">
+<meta name="twitter:image" content="http://yoursite.com/img/seq2seq_encoder-decoder.png">
 
 
 
@@ -126,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/10/11/Google’s-Neural-Machine-Translation-System-Bridging-the-Gap/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/10/09/Sequence-to-Sequence-Learning-with-Neural-Networks/"/>
 
 
 
 
 
-  <title>Google’s Neural Machine Translation System: Bridging the Gap | JG</title>
+  <title>Sequence to Sequence Learning with Neural Networks | JG</title>
   
 
 
@@ -259,7 +255,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/11/Google’s-Neural-Machine-Translation-System-Bridging-the-Gap/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/09/Sequence-to-Sequence-Learning-with-Neural-Networks/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="jieguangzhou">
@@ -276,7 +272,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Google’s Neural Machine Translation System: Bridging the Gap</h1>
+          <h1 class="post-title" itemprop="name headline">Sequence to Sequence Learning with Neural Networks</h1>
         
 
         <div class="post-meta">
@@ -288,8 +284,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-11T11:16:22+08:00">
-                2017-10-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-09T22:53:52+08:00">
+                2017-10-09
               </time>
             
 
@@ -359,53 +355,18 @@
       
         <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 
-<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>　　Google推出了一个NMT系统，叫GNMT,文章讲述了这个系统的详情．</p>
-<h2 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h2><p><img src="/img/GNMT.png" alt="GNMT"><br>　　模型包括三个部分：encoder network, decoder network, attention network.　encoder将一个句子转换为一组向量，每一个symbol转化为一个向量，decoder根据这组向量在每个time生成一个symbol，直到生成结束符号EOS．在decoder解码时候，decoder通过attention模块与ecoder进行连接，通过这个模块来决定关注源句子的哪些地方来生成句子．<br>    其中，attention模块的计算方式为：<br>  $$s_t=AttentionFunction(y_{y-1},x_t)$$ $$p_t=exp(s_t)/\sum_{t=1}^M exp(s_t)$$ $$a_i=\sum_{t=1}^M p_tx_t$$<br>  与之前的文章讲的不一样，这里的\(AttentionFunction\)用的是decoder的output和encoder的output来计算attention,而不是用decoder的hidder state.</p>
-<h3 id="1-Residual-Connections（残差连接）"><a href="#1-Residual-Connections（残差连接）" class="headerlink" title="1 Residual Connections（残差连接）"></a>1 Residual Connections（残差连接）</h3><p> <img src="/img/ResidualConections.png" alt="ResidualConections"></p>
-<blockquote>
-<p>左边是简单叠起来的LSTM,右边是加了Residual connections的，也就是在每一层输出的时候，把输出加上这一层的输入．</p>
-</blockquote>
-<p>　　也就是原来的计算公式是<br>$$c_t^i,m_t^i=LSTM_i(c_{t-1}^i,m_{t-1}^i,x_t^{i-1};W^i)$$ $$x_t^i=m_t^i$$ $$c_t^{i+1},m_t^{i+1}=LSTM_{i+1}(c_{t-1}^{i+1},m_{t-1}^{i+1},x_t^{i-1};W^{i+1})$$<br>　　加入了residual connections之后变为<br>$$c_t^i,m_t^i=LSTM_i(c_{t-1}^i,m_{t-1}^i,x_t^{i-1};W^i)$$ $$x_t^i=m_t^i+x_t^{i-1}$$ $$c_t^{i+1},m_t^{i+1}=LSTM_{i+1}(c_{t-1}^{i+1},m_{t-1}^{i+1},x_t^{i-1};W^{i+1})$$</p>
-<p>　　也就是\(x_t^i=m_t^i+x_t^{i-1}\)加上那个了这一层的输出．从图的右边的模型可以看出把下面的加上去了．</p>
-<h3 id="2-Bi-directional-Encoder-for-First-Layer"><a href="#2-Bi-directional-Encoder-for-First-Layer" class="headerlink" title="2 Bi-directional Encoder for First Layer"></a>2 Bi-directional Encoder for First Layer</h3><p><img src="/img/ Bi-directional Encoder for First Layer.png" alt=" Bi-directional Encoder for First Layer"></p>
-<blockquote>
-<p>在encoder的第一层用了双向的RNN</p>
-</blockquote>
-<p>　　至于为什么只在地一层用双向，而不是每一层用，主要是为了可以优化模型的并行计算．</p>
-<h3 id="3-Model-Parallelism（模型并行）"><a href="#3-Model-Parallelism（模型并行）" class="headerlink" title="3 Model Parallelism（模型并行）"></a>3 Model Parallelism（模型并行）</h3><p>　　文章说了用了两个并行方式来处理这个这么复发,模型并行和数据并行．没计算资源忽略</p>
-<h3 id="4-Segmentation-Approaches（分词方法）"><a href="#4-Segmentation-Approaches（分词方法）" class="headerlink" title="4 Segmentation Approaches（分词方法）"></a>4 Segmentation Approaches（分词方法）</h3><p>　　在解决out-of-vocabulary(OOV，未登录词)的方面上，主要有两个方法</p>
-<blockquote>
-<p>One approach is to simply <strong>copy</strong> rare words from source to target , either based on the attention model, using an external alignment model, or even using a more complicated special purpose pointing network. Another broad category of approaches is to use <strong>sub-word units</strong>, e.g., chararacters, mixed word/characters, or more intelligent sub-words.</p>
-</blockquote>
-<p>　　一种是对于未登录词（大多数是名字数字之类的）用简单的复制方法，用一个对其的模型来出来，直接翻译对其．另外一种是用子词（sub-word units）来做，而文章说GNMT就是用第二种来做的．</p>
-<blockquote>
-<p>• Word: <strong>Jet</strong> makers <strong>feud</strong> over seat width with big orders at stake<br>• wordpieces: <strong>_J et</strong> _makers <strong>_fe ud</strong> _over _seat _width _with _big _orders _at _stake</p>
-</blockquote>
-<p>　　其中Jet feud别切开了．_为一个标记，代表一个词的开头．</p>
-<p>　　不过可以用BPE来切分子词（与论文的方法有些差别）</p>
-<h3 id="5-Training-Criteria（训练标准）"><a href="#5-Training-Criteria（训练标准）" class="headerlink" title="5 Training Criteria（训练标准）"></a>5 Training Criteria（训练标准）</h3><p>　　给定一个包含N个句子对的平行语料\(D\equiv\lbrace X^{(i)},Y^{*(i)}\rbrace _{i=1}^N\)标准的极大似然估计的训练目的是给定所有的输入，能够正确的输出对应结果的log概率值的总和最大，即<br>$$O_{ML}(\theta)＝\sum_{i=1}^Nlog P_\theta(Y^{*(i)}|X^{i}).$$</p>
-<p>　　因为一些问题(不是很懂)，加入了这个</p>
-<blockquote>
-<p>Further, this objective does not explicitly encourage a ranking among incorrect output sequences – where outputs with higher BLEU scores should still obtain higher probabilities under the model – since incorrect outputs are never observed during training.</p>
-</blockquote>
-<p>$$O_{ML}(\theta)＝\sum_{i=1}^Nlog P_\theta(Y^{*(i)}|X^{i})r(Y,Y^{*(i)})$$<br>　　其中\(r(Y, Y^{*(i)})\)就是GLEU值的计算部分，GLUE的计算方法为取输出与目标句子的n-grams，然后计算交集的个数占两个句子的比例，最后取最小的一个．<br>　　为了训练的稳定，将两个式子合起来一起训练<br>$$O_{Mixed}(\theta)=a*O_{ML}\theta+O_{RL}\theta$$<br>　　文中的\(a\)设为0.25</p>
-<h3 id="6-可量化的模型和量化推理过程"><a href="#6-可量化的模型和量化推理过程" class="headerlink" title="6 可量化的模型和量化推理过程"></a>6 可量化的模型和量化推理过程</h3><p>（略）</p>
-<h3 id="7-解码器"><a href="#7-解码器" class="headerlink" title="7 解码器"></a>7 解码器</h3><p>　　针对beam search，提出了两种优化方法,\(s(Y,X)\)是目标函数．<br>$$s(Y,X)=log(P(Y|X))/lp(Y)+cp(X;Y)$$</p>
-<ol>
-<li><p>length normalization, 因为每个词的log概率值都是负数，因此句子越长，值越小，所以使得更容易产生短句，这不合理．<br>$$lp(Y)=\frac{(5+|Y|)^a}{(5+1)^a}$$<br>当句子变长的时候，lp变大，因为\(log(P(Y|X))\)是负数，因此，\(s(Y,X)\)是变大的．这样就可以使得长度不被抑制．</p>
-</li>
-<li><p>防止漏掉一些翻译<br>$$cp(X;Y)=\beta*\sum_{i=1}^{|X|}log(min(\sum_{j=1}^{|Y|}p_{i,j},1.0))$$<br>\(p_{i,j}\)是输出的句子的第j个词对于源句子第ｉ个词的注意力概率，假如第k个词漏翻了，那么\(\sum_{j=1}^{|Y|}p_{k,j}\)就会变小，那么\(log(min(\sum_{j=1}^{|Y|}p_{k,j},1.0))\)将会小于0，因此就会导致s(Y,X)降低．所以训练的时候，从而抑制漏翻．</p>
-</li>
-</ol>
-<p>结果如下<br><img src="/img/ab1.png" alt="ab1"></p>
-<blockquote>
-<p>用了这两个优化方法之后，有相应的提高</p>
-</blockquote>
-<p><img src="/img/ab2.png" alt="ab2"></p>
-<blockquote>
-<p>这个图是先同ML训练然后再用RL训练的图和上图的对比，又有一点提高．</p>
-</blockquote>
-<h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><p><a href="https://arxiv.org/abs/1609.08144v1" target="_blank" rel="external">论文 Google’s Neural Machine Translation System: Bridging the Gap</a></p>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>　　深度神经网络在不同的任务上都表现得很强，但是他却不能被用于将一个序列映射成另外一个序列.在这篇文章，作者们提出了一种端到端的方法来从一个序列学习另外一个序列．方法是:(Encode)用多层的<a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/" target="_blank" rel="external"><strong>LSTM</strong></a>来将一个输入序列转化为一个固定长度的向量，(Decode)然后再把这个向量丢给另外的LSTM作为输入，输出一个新的序列．</p>
+<p>　　文章基于英语译法语的翻译任务来做实验，结果挺好的．还说了一个trick，将encode输入的句子的单词翻转效果会更好一点，就是＂今天　天气　真好＂，变成＂真好　天气　今天＂，效果会更好.</p>
+<h2 id="模型介绍"><a href="#模型介绍" class="headerlink" title="模型介绍"></a>模型介绍</h2><p>　　与<a href="/2017/10/08/Learning-Phrase-Representations-using-RNN-Encoder–Decoder-for-Statistical-Machine-Translation/">上一篇seq2seq</a>的结构不同，那一个的结构中把encoder编码出来的c传给了decoder的每一个时刻，这篇文章中，只把c传给了第一个时刻，作为decoder的初始化hidden state．</p>
+<h3 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h3><p> 　　直接上图</p>
+<p> <img src="/img/seq2seq_encoder-decoder.png" alt="endcoder-decoder"></p>
+<p> 　　图中，给定序列＂ABC＂，生成一个序列＂WXYZ　&lt; EOS &gt;＂,其中&lt; EOS &gt;为结束符号，没有实际意义，用于标记句子结束．</p>
+<h3 id="计算过程"><a href="#计算过程" class="headerlink" title="计算过程"></a>计算过程</h3><p>给定序列\(x_1,…,x_T\)，通过lstm计算得到最后的hidden state \(v\)<br>$$v=lstm(x_1,…,x_T)$$<br>将\(v\)作为decoder的初始状态init_state，可以计算概率\(y_1,…, y_T\)<br>$$p(y_1,…,y_{T’}|x_1,…,x_T)=\prod_{t=1}^{T’}p(y_t|v,y_1,…,y_{t-1})$$</p>
+<p>LSTM可以用来估计条件概率\(p(y_1,…,y_{T’}|x_1,…,x_T)\)，其中\(x_1,…,x_T\)是输入序列，\(y_1,…, y_{T’}\)是对应的正确的输出序列．</p>
+<p>那么对于\(p(y_t|v,y_1,…,y_{t-1})\),所对应的分布可以表示为在词典中所有的词做softmax后得到的值．</p>
+<h3 id="目标函数"><a href="#目标函数" class="headerlink" title="目标函数"></a>目标函数</h3><p>实验的目的是在大量的句子对上训练一个深度LSTM，目标函数定义为<br>$$1/|D| \sum_{(T,S)\in D}log p(T|S)$$</p>
+<p>D是训练集合中所有的句子，当训练完后，可以通过LSTM，在给定句子S时得到句子\(\hat T\):<br>$$\hat T=argmax_T p(T|S)$$<br>在这个解码过程中，可以用beam search 来使得得到的结果更好．</p>
+<h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><p><a href="https://arxiv.org/abs/1409.3215" target="_blank" rel="external">论文 Sequence to Sequence Learning with Neural Networks</a></p>
 <p><a href="https://nlp.stanford.edu/projects/nmt/data/wmt14.en-de/" target="_blank" rel="external">数据集  WMT14</a></p>
 <h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>所有数据，图表均来源于论文．</p>
 
@@ -427,7 +388,7 @@
           
             <a href="/tags/seq2seq/" rel="tag"># seq2seq</a>
           
-            <a href="/tags/nmt/" rel="tag"># nmt</a>
+            <a href="/tags/mnt/" rel="tag"># mnt</a>
           
         </div>
       
@@ -440,8 +401,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/10/09/Sequence-to-Sequence-Learning-with-Neural-Networks/" rel="next" title="Sequence to Sequence Learning with Neural Networks">
-                <i class="fa fa-chevron-left"></i> Sequence to Sequence Learning with Neural Networks
+              <a href="/2017/10/09/Massive-Exploration-of-Neural-Machine-Translation/" rel="next" title="Massive Exploration of Neural Machine Translation">
+                <i class="fa fa-chevron-left"></i> Massive Exploration of Neural Machine Translation
               </a>
             
           </div>
@@ -450,8 +411,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/10/17/A-Neural-Conversational-Model/" rel="prev" title="A Neural Conversational Model">
-                A Neural Conversational Model <i class="fa fa-chevron-right"></i>
+              <a href="/2017/10/11/Google’s-Neural-Machine-Translation-System-Bridging-the-Gap/" rel="prev" title="Google’s Neural Machine Translation System: Bridging the Gap">
+                Google’s Neural Machine Translation System: Bridging the Gap <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -582,7 +543,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型结构"><span class="nav-number">2.</span> <span class="nav-text">模型结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Residual-Connections（残差连接）"><span class="nav-number">2.1.</span> <span class="nav-text">1 Residual Connections（残差连接）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Bi-directional-Encoder-for-First-Layer"><span class="nav-number">2.2.</span> <span class="nav-text">2 Bi-directional Encoder for First Layer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Model-Parallelism（模型并行）"><span class="nav-number">2.3.</span> <span class="nav-text">3 Model Parallelism（模型并行）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Segmentation-Approaches（分词方法）"><span class="nav-number">2.4.</span> <span class="nav-text">4 Segmentation Approaches（分词方法）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-Training-Criteria（训练标准）"><span class="nav-number">2.5.</span> <span class="nav-text">5 Training Criteria（训练标准）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-可量化的模型和量化推理过程"><span class="nav-number">2.6.</span> <span class="nav-text">6 可量化的模型和量化推理过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-解码器"><span class="nav-number">2.7.</span> <span class="nav-text">7 解码器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链接"><span class="nav-number">3.</span> <span class="nav-text">链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注释"><span class="nav-number">4.</span> <span class="nav-text">注释</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型介绍"><span class="nav-number">2.</span> <span class="nav-text">模型介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模型结构"><span class="nav-number">2.1.</span> <span class="nav-text">模型结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算过程"><span class="nav-number">2.2.</span> <span class="nav-text">计算过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目标函数"><span class="nav-number">2.3.</span> <span class="nav-text">目标函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链接"><span class="nav-number">3.</span> <span class="nav-text">链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注释"><span class="nav-number">4.</span> <span class="nav-text">注释</span></a></li></ol></div>
             
 
           </div>
