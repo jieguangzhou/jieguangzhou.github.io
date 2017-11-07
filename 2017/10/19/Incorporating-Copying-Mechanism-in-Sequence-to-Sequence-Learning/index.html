@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="seq2seq,QA," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="摘要　　论文在原seq2seq+attention的基础上引入了copy机制，称为COPYNET机制．这个东西参考了人类交流中对于特别的词直接搬过来用的思想，比如一些专有名词，不懂的词之类的词．在文本摘要任务中的表现甩开了以前的方法． COPYNET　　对于seq2seq+attention不再展开讨论．直接进入主题．复制机制在建模的时候一般比较难处理，文中提出一了中可以完全微分的带有复制机制">
+<meta name="keywords" content="seq2seq,QA">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Incorporating Copying Mechanism in Sequence-to-Sequence Learning">
+<meta property="og:url" content="http://yoursite.com/2017/10/19/Incorporating-Copying-Mechanism-in-Sequence-to-Sequence-Learning/index.html">
+<meta property="og:site_name" content="JG">
+<meta property="og:description" content="摘要　　论文在原seq2seq+attention的基础上引入了copy机制，称为COPYNET机制．这个东西参考了人类交流中对于特别的词直接搬过来用的思想，比如一些专有名词，不懂的词之类的词．在文本摘要任务中的表现甩开了以前的方法． COPYNET　　对于seq2seq+attention不再展开讨论．直接进入主题．复制机制在建模的时候一般比较难处理，文中提出一了中可以完全微分的带有复制机制">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/img/COPYNET.png">
+<meta property="og:image" content="http://yoursite.com/img/Decoder-prob.png">
+<meta property="og:image" content="http://yoursite.com/img/location-base.png">
+<meta property="og:image" content="http://yoursite.com/img/result-copy.png">
+<meta property="og:image" content="http://yoursite.com/img/result-copy-show.png">
+<meta property="og:image" content="http://yoursite.com/img/result-copy-show2.png">
+<meta property="og:image" content="http://yoursite.com/img/result-copy-show3.png">
+<meta property="og:updated_time" content="2017-10-19T09:03:30.272Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Incorporating Copying Mechanism in Sequence-to-Sequence Learning">
+<meta name="twitter:description" content="摘要　　论文在原seq2seq+attention的基础上引入了copy机制，称为COPYNET机制．这个东西参考了人类交流中对于特别的词直接搬过来用的思想，比如一些专有名词，不懂的词之类的词．在文本摘要任务中的表现甩开了以前的方法． COPYNET　　对于seq2seq+attention不再展开讨论．直接进入主题．复制机制在建模的时候一般比较难处理，文中提出一了中可以完全微分的带有复制机制">
+<meta name="twitter:image" content="http://yoursite.com/img/COPYNET.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/19/Incorporating-Copying-Mechanism-in-Sequence-to-Sequence-Learning/"/>
+
+
+
+
+
+  <title>Incorporating Copying Mechanism in Sequence-to-Sequence Learning | JG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/19/Incorporating-Copying-Mechanism-in-Sequence-to-Sequence-Learning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jieguangzhou">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Incorporating Copying Mechanism in Sequence-to-Sequence Learning</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-19T10:59:20+08:00">
+                2017-10-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/论文阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">论文阅读</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/论文阅读/笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>　　论文在原seq2seq+attention的基础上引入了copy机制，称为COPYNET机制．这个东西参考了人类交流中对于特别的词直接搬过来用的思想，比如一些专有名词，不懂的词之类的词．在文本摘要任务中的表现甩开了以前的方法．</p>
+<h2 id="COPYNET"><a href="#COPYNET" class="headerlink" title="COPYNET"></a>COPYNET</h2><p>　　对于seq2seq+attention不再展开讨论．直接进入主题．复制机制在建模的时候一般比较难处理，文中提出一了中可以完全微分的带有复制机制的seq2seq模型，因此可以通过梯度下降来进行端对端的学习．</p>
+<h3 id="1-模型概述"><a href="#1-模型概述" class="headerlink" title="1 模型概述"></a>1 模型概述</h3><p>如下图所示，COPYNET仍然是一个encoder-decoder的框架．<br><img src="/img/COPYNET.png" alt="COPYNET"></p>
+<p><strong>Encoder:　</strong>与之前的Encoder一样都是采用双向RNN来将句子转换成一组等长的hidden state.将每个词\(x_t\),表示成\(\lbrace h_1,…,h_T\rbrace\)，记为\(\mathbf M\)，最后通过几个方法来将其Decoding.</p>
+<p><strong>Decoder:　</strong>用一个RNN通过读取\(\mathbf M\)来生成目标句子，与以前的RNN-decoder类似，只是一下几点不同：</p>
+<ul>
+<li><strong>Prediction:　</strong>COPYNET根据两个模型的混合概率来生成词，一个是生成模型，一个是负责从源句子中选词的复制模型．</li>
+<li><strong>State Update:　</strong>以前在\(t-1\)时刻预测出来的词用来更新第\(t\)个时刻的状态，但是COPYNET不仅仅用这个词的embedding，还拼接上了这个词在\(\mathbf M\)中特定位置的状态．</li>
+<li><strong>Reading M:　</strong>COPYNET会选择性的读取\(\mathbf M\)来获取混合了内容寻址和位置寻址的信息．</li>
+</ul>
+<h3 id="2-复制和生成预测"><a href="#2-复制和生成预测" class="headerlink" title="2 复制和生成预测"></a>2 复制和生成预测</h3><p>　　假设词典为\(\nu =\lbrace v_1,…,v_N\rbrace\)，词典以外的词为UNK.另外对于句子的词组成的的集合有\(\chi =\lbrace x_1,…,x_{T_S}\rbrace \)．</p>
+<p>　　给定decoder第\(t\)时刻的状态\(s_t\)，\(\mathbf M\)，可以生成所有词的混合概率\(y_t\)：<br>  $$p(y_t|\mathbf {s_t},y_{t-1},\mathbf {c_t},\mathbf M)=p(y_t,\mathbf g|\mathbf {s_t},y_{t-1},\mathbf {c_t},\mathbf M)+p(y_t, \mathbf c|\mathbf {s_t},y_{t-1},\mathbf {c_t},\mathbf M)$$<br> 　　这里\(g\)代表生成模型，\(c\)代表复制模型，两种模型的概率计算为:<br>   $$p(y_t,\mathbf g|\cdot)=<br>   \begin{cases}<br>   \frac{1}{Z}e^{\psi_g(y_t)}, &amp;y_t \in \nu \\<br>   0, &amp;y_t \in \chi \cap \overline{\nu} \\\frac{1}{Z}e^{\psi_g(UNK)} &amp;y_t \notin \nu \cup \chi<br>   \end{cases} $$</p>
+<p>   $$p(y_t,\mathbf c|\cdot)=<br>   \begin{cases}<br>   \frac{1}{Z}\sum_{j:x_j=y_t}e^{\psi_c(x_j)}, &amp;y_t \in \chi \\<br>   0 &amp;otherwise<br>   \end{cases}<br>$$<br>在这里\(\psi_h(\cdot)\)和\(\psi_c(\cdot)\)分别是生成模型和复制模型的得分函数，\(Z\)是标准化项．\(Z=\sum_{v\in \nu \cup \lbrace UNK\rbrace}e^{\psi_g(v)}+\sum_{x\in \chi}e^{\psi_c(x)}\)，因为要共享标准化项，所以两个模型要首先经过一个\(softmax\)，用下图来表示4种decoder概率\(p(y_t|\cdot)\)．<br>  <img src="/img/Decoder-prob.png" alt="Decoder-prob.png"></p>
+<p>　　<strong>生成模型：</strong>使用一样的跟通用Rnn encoder-decoder一样的计算方法:<br>  $$\psi(y_t=v_i)=v_i^TW_os_t,\qquad v_i\in \nu \cup UNK$$<br>　　其中\(W_o\in R^{(N+1)*d_s}\)，\(v_i\)是词\(v_i\)的one-hot向量．</p>
+<p> 　　<strong>复制模型：</strong>计算词\(x_j\)的复制得分方法：<br>   $$\psi(y_t=x_j)=\sigma(v_j^TW_c)s_t,\qquad x_j\in \chi$$<br>　　这里\(W_c\in R^{d_h*d_s}\)，\(\sigma(\cdot)\)是一个非线性变换，文中说发现使用tanh比线性变换要好，所以文中的实验是用的tanh．计算复制模型时候，用双向RNN来将文本信息和位置信息表示成hidden states(\(\mathbf M\))．值得注意的是，将所有的\(x_j\)的概率加起来用\(y_t\)表示，是因为可能有多个这样的词在源句子中．</p>
+<p>　　另外，如果\(y_t\)没有出现在源句子中，那么有\(p(y_t,\mathbf c|\cdot)=0\)；如果\(y_t\)只出现在源句子中，不在词典里面，那么有\(p(y_t,\mathbf g|\cdot)=0\).</p>
+<h3 id="3-状态更新"><a href="#3-状态更新" class="headerlink" title="3 状态更新"></a>3 状态更新</h3><p>　　COPYNET更新状态的方法与通用的attention-based seq2seq模型不一样．在\(y_{t-1}\longrightarrow s_t\)的时候，\(y_{t-1}\)表示为\([e(y_{t-1};\varsigma (y_{t-1})]^T\)，其中\(e(y_{t-1})\)是词向量表示，\(\varsigma (y_{t-1})\)是\(M\)中的hidden state对应\(y_t\)的加权和．<br>  $$\varsigma(y_{t-1})=\sum_{\tau=1}^{T_s}p_{t\tau}\mathbf {h_\tau}$$ $$p_{t\tau}=<br>  \begin{cases}<br>  \frac{1}{K}p(x_\tau,\mathbf c|s_{t-1},\mathbf M), &amp; x_\tau=y_{t-1} \\<br>  0 &amp; otherwise<br>  \end{cases}<br>$$<br>　　这里\(K\)是一个标准化项，等于\(\sum_{\tau’:x_{\tau’}=y_{t-1}}p(x_{\tau’},\mathbf c|s_{t-1},M)\)，表示词\(y_{t-1}\)可能在源句子中有多个位置．<br>　　从某种意义来讲\(\varsigma(y_{t-1})\)相当于是一种在\(M\)上的注意力读取具有很高的精度，文章成为选择性读取，它在复制模型中被专门设计为：对应与\(y_{t-1}\)的精确位置，自然以hidden state的形式编码了\(y_{t-1}\)的位置．这种设计有助于复制连续的子序列．如果\(y_{t-1}\)不在源句子中，那么让\(\varsigma(y_{t-1})=0\)<br>　　按照鄙人的理解，就是有三种情况</p>
+<ul>
+<li><p>\(y_{t-1}\)不在源句子中，那么\(\varsigma(y_{t-1})\)为0．</p>
+</li>
+<li><p>\(y_{t-1}\)在源句子中只出现一次，那么\(\varsigma(y_{t-1})\)为对应的出现位置的hidden state．</p>
+</li>
+<li><p>\(y_{t-1}\)在源句子中出现多次，那么\(\varsigma(y_{t-1})\)为按照公式算出那些出现位置的hidden state的加权和．</p>
+</li>
+</ul>
+<h3 id="4-mathbf-M-的混合寻址"><a href="#4-mathbf-M-的混合寻址" class="headerlink" title="4 \(\mathbf M\)的混合寻址"></a>4 \(\mathbf M\)的混合寻址</h3><p>　　<strong>给予位置的寻址：</strong>根据\(h_i\)的位置细信息，信息流动过程为：<br>  <!-- 肩头不能正常显示
+$$\varsigma(y_{t-1})\xrightarrow{update} s_t\xrightarrow{predict} y_t\xrightarrow{sel.read} \varsigma(y_t)$$
+--><br><img src="/img/location-base.png" alt="location-base.png"><br>　　这是一个向右移一步的简单例子．当\(\varsigma(y_{t-1})\)定位在\(X\)中的地\(l^{th}\)个词的时候，状态更新\(\varsigma(y_{t-1}) \;{update}\; s_t\)使得\(s_t\)在预测的时候更偏向与\(X\)中的第\(l^{th}\)个词，然后就形成了复制机制．</p>
+<p>　　<strong>OOV词处理</strong>　虽然不能确切证明，但是真的有用．</p>
+<h2 id="目标函数"><a href="#目标函数" class="headerlink" title="目标函数"></a>目标函数</h2><p>　　因为COPYNET可以完全微分，那么可以通过端对端的训练方法来训练，目标是最小化负的对数似然估计：<br> $$L=-\frac{1}{N}\sum_{k=1}^N\sum_{t=1}^Tlog[p(y_t^{(k)}|y_{\lt t}^{(k)},X^{(k)})]$$</p>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>　　实验在三个不同特点的数据进行</p>
+<ul>
+<li>合成数据</li>
+<li>摘要生成数据</li>
+<li>单轮对话数据</li>
+</ul>
+<p>　　本文对最后两个就行讨论．</p>
+<h3 id="1-摘要生成"><a href="#1-摘要生成" class="headerlink" title="1 摘要生成"></a>1 摘要生成</h3><p>　　<strong>数据集</strong>　数据使用的是LCSTS 数据集合，一个从新浪微博爬去的新闻摘要数据．文中只使用里面评分3到5分的数据，第一部分作为训练集合，第三部分作为测试集．<br>　　<strong>实验设置</strong>　分别用字 (+C) 和词 (+W) 来训练模型，使用字的时候，字典大小为3000，用词的时候，词典大小为10000．评估指标使用ROUGE-1,ROUGE-2和ROUGE-L (Lin,2004).</p>
+<p>　　从如中可以看出，COPYNET狠狠的打败了其他模型．<br>    <img src="/img/result-copy.png" alt="result-copy.png"><br>　　而且从下图也可以看出，产生的摘要质量也是蛮好的．<br>    <img src="/img/result-copy-show.png" alt="result-copy-show.png"></p>
+<pre><code>&gt;　更多结果查看论文
+</code></pre><h3 id="2-单轮对话"><a href="#2-单轮对话" class="headerlink" title="2 单轮对话"></a>2 单轮对话</h3><p>　　<strong>数据集</strong>　数据从三个渠道得到</p>
+<pre><code>1. 从百度贴吧中获取
+2. 通过插槽模式获得，如Q:你好，我叫x．　A:你好，x.这些对应的是一个输入多种输出的．
+3. 与合成数据类似，通过天从序列槽来生成数据，比如带有人命，时间的数据．
+</code></pre><p>　　<strong>实验设置</strong>　实验通过173个模板构建了两个数据集合DS-1和DS-2，主演的区别是DS-2中的训练集和测试集没有重叠．每个数据集合用6500个作为训练集合，1500个作为测试集合．<br>　　实验评价指标是同Beam search出来1个或者10个句子和golden的匹配程度．实验表明优于RNNsearch，尤其是在DS-2中，差异更大．<br>  <img src="/img/result-copy-show2.png" alt="result-copy-show2"><br>  而且生成的句子好像也比较合理．<br>  <img src="/img/result-copy-show3.png" alt="result-copy-show3"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>　　论文提出了一种可以微分的复制机制，在涉及到要复制词的任务中表现得很好．毕竟在很多NLP任务中，复制的操作还是很重要．</p>
+<h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><p><a href="https://arxiv.org/abs/1603.06393" target="_blank" rel="external">论文 Incorporating Copying Mechanism in Sequence-to-Sequence Learning</a></p>
+<p>数据集，论文使用的数据并没有公开，是爬百度和新浪得到了，所以木有数据．</p>
+<h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>所有数据，图表均来源于论文．</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/seq2seq/" rel="tag"># seq2seq</a>
+          
+            <a href="/tags/QA/" rel="tag"># QA</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/18/Topic-Aware-Neural-Response-Generation/" rel="next" title="Topic Aware Neural Response Generation">
+                <i class="fa fa-chevron-left"></i> Topic Aware Neural Response Generation
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">jieguangzhou</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#COPYNET"><span class="nav-number">2.</span> <span class="nav-text">COPYNET</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-模型概述"><span class="nav-number">2.1.</span> <span class="nav-text">1 模型概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-复制和生成预测"><span class="nav-number">2.2.</span> <span class="nav-text">2 复制和生成预测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-状态更新"><span class="nav-number">2.3.</span> <span class="nav-text">3 状态更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-mathbf-M-的混合寻址"><span class="nav-number">2.4.</span> <span class="nav-text">4 \(\mathbf M\)的混合寻址</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目标函数"><span class="nav-number">3.</span> <span class="nav-text">目标函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验"><span class="nav-number">4.</span> <span class="nav-text">实验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-摘要生成"><span class="nav-number">4.1.</span> <span class="nav-text">1 摘要生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-单轮对话"><span class="nav-number">4.2.</span> <span class="nav-text">2 单轮对话</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链接"><span class="nav-number">6.</span> <span class="nav-text">链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注释"><span class="nav-number">7.</span> <span class="nav-text">注释</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jieguangzhou</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

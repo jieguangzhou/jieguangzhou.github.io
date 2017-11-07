@@ -79,18 +79,23 @@
 
 
 
-<meta name="description" content="摘要链接论文 Topic Aware Neural Response Generation 数据集  WMT14 注释所有数据，图表均来源于论文．">
+<meta name="description" content="摘要　　文章考虑了把主题信息结合到seq2seq框架中来使得chatbot生成带有信息和有趣的回复，在文章最后提出了一个主题感知的seq2seq模型．模型利用主题来模拟让人类说话有趣有内涵的先前知识和通过注意力机制联合主题信息来使得生成概率产生偏差．其中主题信息通过预先好的LDA模型来产生． Topic aware Seq2Seq model　　假设有数据集\(D=\lbrace (K_i,X">
 <meta name="keywords" content="seq2seq,QA">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Topic Aware Neural Response Generation">
 <meta property="og:url" content="http://yoursite.com/2017/10/18/Topic-Aware-Neural-Response-Generation/index.html">
 <meta property="og:site_name" content="JG">
-<meta property="og:description" content="摘要链接论文 Topic Aware Neural Response Generation 数据集  WMT14 注释所有数据，图表均来源于论文．">
+<meta property="og:description" content="摘要　　文章考虑了把主题信息结合到seq2seq框架中来使得chatbot生成带有信息和有趣的回复，在文章最后提出了一个主题感知的seq2seq模型．模型利用主题来模拟让人类说话有趣有内涵的先前知识和通过注意力机制联合主题信息来使得生成概率产生偏差．其中主题信息通过预先好的LDA模型来产生． Topic aware Seq2Seq model　　假设有数据集\(D=\lbrace (K_i,X">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-18T07:01:17.123Z">
+<meta property="og:image" content="http://yoursite.com/img/TA-Seq2Seq.png">
+<meta property="og:image" content="http://yoursite.com/img/TA-Seq2Seq_result1.png">
+<meta property="og:image" content="http://yoursite.com/img/TA-Seq2Seq_result2.png">
+<meta property="og:image" content="http://yoursite.com/img/TA-Seq2Seq_result3.png">
+<meta property="og:updated_time" content="2017-10-19T09:32:19.450Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Topic Aware Neural Response Generation">
-<meta name="twitter:description" content="摘要链接论文 Topic Aware Neural Response Generation 数据集  WMT14 注释所有数据，图表均来源于论文．">
+<meta name="twitter:description" content="摘要　　文章考虑了把主题信息结合到seq2seq框架中来使得chatbot生成带有信息和有趣的回复，在文章最后提出了一个主题感知的seq2seq模型．模型利用主题来模拟让人类说话有趣有内涵的先前知识和通过注意力机制联合主题信息来使得生成概率产生偏差．其中主题信息通过预先好的LDA模型来产生． Topic aware Seq2Seq model　　假设有数据集\(D=\lbrace (K_i,X">
+<meta name="twitter:image" content="http://yoursite.com/img/TA-Seq2Seq.png">
 
 
 
@@ -353,8 +358,29 @@
       
         <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 
-<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><p><a href="https://arxiv.org/abs/1606.08340" target="_blank" rel="external">论文 Topic Aware Neural Response Generation</a></p>
-<p><a href="https://nlp.stanford.edu/projects/nmt/data/wmt14.en-de/" target="_blank" rel="external">数据集  WMT14</a></p>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>　　文章考虑了把主题信息结合到seq2seq框架中来使得chatbot生成带有信息和有趣的回复，在文章最后提出了一个主题感知的seq2seq模型．模型利用主题来模拟让人类说话有趣有内涵的先前知识和通过注意力机制联合主题信息来使得生成概率产生偏差．其中主题信息通过预先好的LDA模型来产生．</p>
+<h2 id="Topic-aware-Seq2Seq-model"><a href="#Topic-aware-Seq2Seq-model" class="headerlink" title="Topic aware Seq2Seq model"></a>Topic aware Seq2Seq model</h2><p>　　假设有数据集\(D=\lbrace (K_i,X_i,Y_i)\rbrace _{i=1}^N\)，其中\(X_i\)是问题，\(Y_i\)是回复，\(K_i\)是\(X_i\)对应的主题的主题词．给定问题\(X\)和主题词\(K\)，模型生成\(X\)相应的回答．<br>　　模型的学习需要解决两个问题，1)怎样获得主题词；2)怎么学习模型</p>
+<h3 id="Topic-word-acquisition"><a href="#Topic-word-acquisition" class="headerlink" title="Topic word acquisition"></a>Topic word acquisition</h3><p>　　通过从一个训练好的Twitter LDA模型中获取主题词，使用collapsed Gibbs sampling 算法来估计LDA模型的参数，然后使用训练好的模型为问题\(X\)选择一个主题\(z\)，选择\(z\)主题下的前100个词，除去一些常见词比如＂你＂，＂谢谢＂之类的词．那么就吧这些词\(K\)作为\(X\)的主题词．<br>　　在模型(TA-Seq2seq)中，需要将每个主题词表示成一个向量才能进行计算，文章的计算方法是计算每个主题词在主题中的分布(词出现在每个主题的概率)：<br>  $$p(z|w)\propto {\frac {C_{wz}}{\sum_{z’} C_{wz}}}$$<br>　　其中\(C_{wz}\)是词\(w\)在主题\(z\)中出现的次数．在实验中，Twitter LDA模型是使用新浪微薄的数据训练哦．</p>
+<h3 id="TA-Seq2Seq"><a href="#TA-Seq2Seq" class="headerlink" title="TA-Seq2Seq"></a>TA-Seq2Seq</h3><p>　　下图展示了Topic aware Seq2Seq model模型的结构：<br><img src="/img/TA-Seq2Seq.png" alt="TA-Seq2Seq"></p>
+<p>　　尤其注意的是，在编码的时候，编码器使用双向RNN其问题\(X\)表示成向量\(\lbrace h_t\rbrace_{t=1}^T\)，同时，主题编码器从主题词列表中根据主题词分布公式选取\(X\)的主题\(K\)（n个）对应的编码.记为\((k_1,…,k_n)\)．</p>
+<p>　　解码过程中，在step \(i\)的时候，除了对问题做attention（message attention）之外，还对主题词做attention（Topic attention），主题词的embedding记为\(\lbrace k_j\rbrace_{j=1}^n\)，那么代表主题的向量\(o_i\)则可以由各主题词加权得到，对于\(k_j\)的权重可以由下公式计算得到：<br>  $$a_{ij}^i=\frac{exp(\eta_o(s_{i-1},k_j,h_T))}{\sum_{j’=1}^nexp(\eta_o(s_{i-1},k_{j’},h_T))}$$<br>　　其中\(s_{i-1}\)是解码器第\({i-1}\)个的hidden state，\(h_T\)是编码器最后一个hidden state，\(\eta_o\)是一个多层感知机．对比传统的attention，Topic attention使用encoder中最后一个hidden state，可以削弱与问题无关主题的影响和突出相关主题的重要性．</p>
+<p>　　定义词的生成概率\(p(y_i)＝p_V(y_i)+p_K(y_i)\)，其中\(p_V(y_i)\)和\(p_K(y_i)\)定义为：<br>  $$p_V(y_i=w)=\begin{cases}<br>\frac{1}{Z}e^{\psi_V(s_i,y_{i-1},w)},&amp;w\in V\cup K\\\<br>0,&amp;w\notin V\cup K<br>\end{cases}$$<br>$$p_K(y_i=w)=\begin{cases}<br>\frac{1}{Z}e^{\psi_V(s_i,y_{i-1},c_i,w)},&amp;w\in K\\<br>0,&amp;w\notin K<br>\end{cases}$$ $$s_i=f(y_{i-1},s_{i-1},c_i,o_i)$$<br>　　其中\(V\)回答的词典，\(f\)是一个GRU unit，\(\psi_V(s_i,y_{i-1})\)和\(\psi_K(s_i,y_{i-1},c_i)\)定义为<br>$$\psi_V(s_i,y_{i-1},w)=\sigma(\mathbf {w^T(W_V^ss_i+W_V^yy_{i-1}+b_V))},\\<br>\psi_K(s_i,y_{i-1},c_i,w)=\sigma(\mathbf  {w^T(W_K^ss_i+W_K^yy_{i-1}+W_Kc+b_K))}$$<br>　　其中\(\sigma()\)是tanh函数，\(\mathbf w\)是词\(w\)的ont-hot向量，\(Z\)是一个标准化器．</p>
+<p>　　概率\(p_V(y_i)\)类似于seq2seq加上attenion机制，对于\(p_K(y_i)\)，相当于一个使得回答生成句子生成概率产生偏差的额外的概率项．</p>
+<p>　　这个模型的另外一个有点是在生成回答的第一个词的时候，不仅考虑了问题的信息，还包含了主题信息，这样第一个词生成的好了，根据句子生成的原理，就可以提高后面生成的质量．</p>
+<h2 id="模型评估"><a href="#模型评估" class="headerlink" title="模型评估"></a>模型评估</h2><p>　　文章对模型进行了三个指标的评估</p>
+<h3 id="评价标准"><a href="#评价标准" class="headerlink" title="评价标准"></a>评价标准</h3><h4 id="1-Perplexity"><a href="#1-Perplexity" class="headerlink" title="1 Perplexity"></a>1 Perplexity</h4><p>$$PPL=exp\lbrace -\frac{1}{N}\sum_{i-1}^N log(p(\mathbf {Y_i}))$$</p>
+<h4 id="2-Distinct-1-amp-distinct-2"><a href="#2-Distinct-1-amp-distinct-2" class="headerlink" title="2 Distinct-1 &amp; distinct-2"></a>2 Distinct-1 &amp; distinct-2</h4><p>　　计算生成句子的unigrams和bigrams的不同的个数和和占所有unigrams与bigrams的比例，用这个指标来衡量生成句子的信息量，越大表示出现的多样性越好．</p>
+<h4 id="3-Human-annotation"><a href="#3-Human-annotation" class="headerlink" title="3 Human annotation"></a>3 Human annotation</h4><p>　　人工评价</p>
+<pre><code>1. +2:回复不仅自然流畅，还有内涵和有趣
+2. +1:回复可以用于回到问题，但是太普遍，比如＂我不知道＂
+3. 0:回复对不上问题
+</code></pre><h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3><p>　　在人工评估中，TA-Seq2Seq模型生成的有趣回答有44.7，比以前的方法提高了百分之10几．生成效果得到了很好的提升．<br><img src="/img/TA-Seq2Seq_result1.png" alt="TA-Seq2Seq_result1"></p>
+<p>　　模型的PPl指标比当时最优的QA模型都好，湘江了挺多，而且从distince指标可以看出，富含的信息也原多于之前的模型．</p>
+<p><img src="/img/TA-Seq2Seq_result2.png" alt="TA-Seq2Seq_result2"></p>
+<p>　　模型对比了S2SA-MMI和S2SA生成的句子，可以看出，明显给力很多．</p>
+<p><img src="/img/TA-Seq2Seq_result3.png" alt="TA-Seq2Seq_result3"></p>
+<h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><p><a href="https://arxiv.org/abs/1606.08340" target="_blank" rel="external">论文 Topic Aware Neural Response Generation</a></p>
+<p>数据集，论文使用的数据并没有公开，是爬百度和新浪得到了，所以木有数据．</p>
 <h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>所有数据，图表均来源于论文．</p>
 
       
@@ -397,6 +423,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/19/Incorporating-Copying-Mechanism-in-Sequence-to-Sequence-Learning/" rel="prev" title="Incorporating Copying Mechanism in Sequence-to-Sequence Learning">
+                Incorporating Copying Mechanism in Sequence-to-Sequence Learning <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -469,7 +499,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -526,7 +556,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链接"><span class="nav-number">2.</span> <span class="nav-text">链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注释"><span class="nav-number">3.</span> <span class="nav-text">注释</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Topic-aware-Seq2Seq-model"><span class="nav-number">2.</span> <span class="nav-text">Topic aware Seq2Seq model</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Topic-word-acquisition"><span class="nav-number">2.1.</span> <span class="nav-text">Topic word acquisition</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TA-Seq2Seq"><span class="nav-number">2.2.</span> <span class="nav-text">TA-Seq2Seq</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型评估"><span class="nav-number">3.</span> <span class="nav-text">模型评估</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#评价标准"><span class="nav-number">3.1.</span> <span class="nav-text">评价标准</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Perplexity"><span class="nav-number">3.1.1.</span> <span class="nav-text">1 Perplexity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Distinct-1-amp-distinct-2"><span class="nav-number">3.1.2.</span> <span class="nav-text">2 Distinct-1 & distinct-2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Human-annotation"><span class="nav-number">3.1.3.</span> <span class="nav-text">3 Human annotation</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结果"><span class="nav-number">3.2.</span> <span class="nav-text">结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链接"><span class="nav-number">4.</span> <span class="nav-text">链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注释"><span class="nav-number">5.</span> <span class="nav-text">注释</span></a></li></ol></div>
             
 
           </div>
