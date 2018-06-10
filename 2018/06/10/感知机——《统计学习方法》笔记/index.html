@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="统计学习方法," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="感知机——《统计学习方法》笔记1 模型定义&amp;emsp;&amp;emsp;假设输入空间为$X \subseteq \textbf {R}^n​$   ,输出空间为$Y = { +1, -1}​$ ，输入$x \in X​$为实例的特征向量，输出$y \in Y​$为实例的类别，则以下从输入到输出的函数成为感知机$$f(x) = sign(w \cdot x + b)$$&amp;emsp;&amp;emsp;其中$">
+<meta name="keywords" content="统计学习方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="感知机——《统计学习方法》笔记">
+<meta property="og:url" content="http://yoursite.com/2018/06/10/感知机——《统计学习方法》笔记/index.html">
+<meta property="og:site_name" content="JG">
+<meta property="og:description" content="感知机——《统计学习方法》笔记1 模型定义&amp;emsp;&amp;emsp;假设输入空间为$X \subseteq \textbf {R}^n​$   ,输出空间为$Y = { +1, -1}​$ ，输入$x \in X​$为实例的特征向量，输出$y \in Y​$为实例的类别，则以下从输入到输出的函数成为感知机$$f(x) = sign(w \cdot x + b)$$&amp;emsp;&amp;emsp;其中$">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://oxwpra2mu.bkt.clouddn.com/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%952.1%20%E6%84%9F%E7%9F%A5%E6%9C%BA%E6%A8%A1%E5%9E%8B.png">
+<meta property="og:updated_time" content="2018-06-10T03:44:25.159Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="感知机——《统计学习方法》笔记">
+<meta name="twitter:description" content="感知机——《统计学习方法》笔记1 模型定义&amp;emsp;&amp;emsp;假设输入空间为$X \subseteq \textbf {R}^n​$   ,输出空间为$Y = { +1, -1}​$ ，输入$x \in X​$为实例的特征向量，输出$y \in Y​$为实例的类别，则以下从输入到输出的函数成为感知机$$f(x) = sign(w \cdot x + b)$$&amp;emsp;&amp;emsp;其中$">
+<meta name="twitter:image" content="http://oxwpra2mu.bkt.clouddn.com/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%952.1%20%E6%84%9F%E7%9F%A5%E6%9C%BA%E6%A8%A1%E5%9E%8B.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/06/10/感知机——《统计学习方法》笔记/"/>
+
+
+
+
+
+  <title>感知机——《统计学习方法》笔记 | JG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/10/感知机——《统计学习方法》笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jieguangzhou">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">感知机——《统计学习方法》笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-10T18:28:00+08:00">
+                2018-06-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+
+<h2 id="感知机——《统计学习方法》笔记"><a href="#感知机——《统计学习方法》笔记" class="headerlink" title="感知机——《统计学习方法》笔记"></a>感知机——《统计学习方法》笔记</h2><h3 id="1-模型定义"><a href="#1-模型定义" class="headerlink" title="1 模型定义"></a>1 模型定义</h3><p>&emsp;&emsp;假设输入空间为$X \subseteq \textbf {R}^n​$   ,输出空间为$Y = { +1, -1}​$ ，输入$x \in X​$为实例的特征向量，输出$y \in Y​$为实例的类别，则以下从输入到输出的函数成为感知机<br>$$<br>f(x) = sign(w \cdot x + b)<br>$$<br>&emsp;&emsp;其中$w,b$为感知机的参数，$w \in \textbf {R}^n$一般称为权值(weight)，$b \in \textbf {R}$称为偏置(bias)。$w \cdot x$为$w$和$x$的内积，那么两个$n$维的向量的点积得到一个实数。sign为符号函数<br>$$<br>sign(x) =<br>\begin{cases}<br>+1 &amp; x \geq 0    \\<br>-1 &amp; x &lt; 0<br>\end{cases}<br>$$<br>&emsp;&emsp;感知机为<strong>线性分类模型</strong>，属于<strong>判别模型</strong>，感知机模型的假设空间为特征空间中所有的线性分类模型或者线性分类器的集合。</p>
+<p>&emsp;&emsp;感知机的几何解释为，线性方程<br>$$<br>w \cdot x + b = 0<br>$$<br>对应于特征空间中的一个超平面$S$，其中$w$和$b$分别为超平面的法向量和截距。若这个超平面就将特征空间分为两个部分，分别为正负两类，那么称这个超平面为分离超平面，如图所示</p>
+<p><img src="http://oxwpra2mu.bkt.clouddn.com/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%952.1%20%E6%84%9F%E7%9F%A5%E6%9C%BA%E6%A8%A1%E5%9E%8B.png" alt="分离超平面"></p>
+<p>&emsp;&emsp;感知机的学习为给定训练集<br>$$<br>T={ (x_1, y_1), (x_2,y_2),…(x_N,y_N)}<br>$$<br>其中$x_i \in X \subseteq \textbf{R}^n,y_i \in Y={+1,-1},i=1,2,…N$，求得模型参数$w,b$。而感知机的预测，可通过模型求得输入实例所对应的类别。</p>
+<h3 id="2-损失函数"><a href="#2-损失函数" class="headerlink" title="2 损失函数"></a>2 损失函数</h3><p>&emsp;&emsp;给定一个数据集，若存在某个分类超平面能够将数据集的正实例和负实例完全分正确地划分到超平面的两侧，则称数据集为线性可分数据集，否则称数据集为线性不可分。</p>
+<p>&emsp;&emsp;假设训练数据是线性可分的，那么我们的目标是找到一个分类超平面，将训练数据的正负实例分开，也就是要找到合适的$w,b$(通过$w,b$可以确定一个超平面)。因此感知机模型定义损失函数为<strong>误分类点到超平面$S$的总距离</strong>。其中任意一个点$x_0$到超平面的距离为<br>$$<br>\frac{1}{||w||}(w \cdot x + b)<br>$$<br>&emsp; &emsp; 其中$||w||$为$w$的二范数。对于误分类的数据$(x_i,y_i)$<br>$$<br>-y_i(w \cdot x_i + b) &gt; 0<br>$$<br>成立，因为当误分类数据为$(x_i,y_i=-1)$时，即负类被分类成正类，那么$w \cdot x_i + b &gt; 0$，成立；当误分类数据为$(x_i,y_i=1)$时，即正类被分类成负类，那么$w \cdot x_i + b &lt; 0$，也成立。所以误分类点$x_i$到超平面的距离为<br>$$<br>-\frac{1}{||w||}y_i(w \cdot x_i + b)<br>$$<br>​    如果不考虑$\frac{1}{||w||}$，则将几何间隔转化为函数间隔$y(w \cdot x + b)$，就可得到感知机学习的损失函数。那么给定数据集$T={ (x_1, y_1), (x_2,y_2),…(x_N,y_N)}$，感知机学习的损失函数为：<br>$$<br>L(w,b) = -\sum_{x_i \in M} y_i(w \cdot x_i + b)<br>$$<br>&emsp;&emsp;其中$M$为误分类点的集合。</p>
+<h3 id="3-学习算法"><a href="#3-学习算法" class="headerlink" title="3 学习算法"></a>3 学习算法</h3><h4 id="3-1-算法原始形式"><a href="#3-1-算法原始形式" class="headerlink" title="3.1 算法原始形式"></a>3.1 算法原始形式</h4><p>&emsp;&emsp;定义最优化问题：给定一个训练数据集$T={ (x_1, y_1), (x_2,y_2),…(x_N,y_N)}$，求参数$w,b$，使其为以下损失函数极小化问题的解<br>$$<br>min_{w,b}L(w,b) = -\sum_{x_i \in M} y_i(w \cdot x_i + b)<br>$$<br>&emsp;&emsp;感知机学习算法可以采用通过随机梯度下降。首先计算损失函数$L(w,b) $的梯度，对$w,b$求偏导，有</p>
+<p>$$<br>\frac{\partial(L(w,b))}{\partial w} = -\sum_{x_i \in M}y_ix_i \\<br>\frac{\partial(L(w,b))}{\partial b} = -\sum_{x_i \in M}y_i\\<br>$$</p>
+<p>&emsp;&emsp;那么学习算法流程为：</p>
+<p>&emsp;&emsp;<strong>输入</strong>：训练数据集合$T={ (x_1, y_1), (x_2,y_2),…(x_N,y_N)}$，学习率$\eta(0&lt;\eta \leq 1)$;</p>
+<p>&emsp;&emsp;<strong>输出</strong>：$w,b$;感知机模型$f(x)=sign(w\cdot x + b)$。</p>
+<p>&emsp;&emsp;（1）初始化$w_0,b_0$</p>
+<p>&emsp;&emsp;（2）在训练集上选择数据$(x_i,y_i)$</p>
+<p>&emsp;&emsp;（3）如果$y_i(w\cdot x_i + b) \leq 0$<br>$$<br>w \leftarrow  w + \eta y_ix_i \\<br>b \leftarrow b + \eta y_i<br>$$<br>&emsp;&emsp;（4）转至（2），知道全部分类正确。</p>
+<p>&emsp;&emsp;下面为以例2.1为例的代码实现。</p>
+<blockquote>
+<p>正实例点为$x_1=(3,3)^T,x_2=(4,3)^T$,负实例点是$x_3=(1,1)^T$。</p>
+</blockquote>
+<p>&emsp;&emsp;首先先用numpy生成数据：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div><div class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</div><div class="line">%matplotlib inline</div><div class="line"></div><div class="line"><span class="comment"># 用于打印数据</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_var</span><span class="params">(var, name=<span class="string">'x'</span>)</span>:</span></div><div class="line">    print(name+<span class="string">':\n'</span>,var, <span class="string">'\nshape:'</span>, var.shape <span class="keyword">if</span> hasattr(var, <span class="string">'shape'</span>) <span class="keyword">else</span> <span class="string">''</span>)</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 例2.1 中的数据</span></div><div class="line">x = np.array([[<span class="number">3</span>, <span class="number">3</span>],[<span class="number">4</span>, <span class="number">3</span>], [<span class="number">1</span>, <span class="number">1</span>]]).T</div><div class="line">print_var(x, <span class="string">'x'</span>)</div><div class="line">y = np.array([<span class="number">1</span>, <span class="number">1</span>, <span class="number">-1</span>])</div><div class="line">print_var(y, <span class="string">'y'</span>)</div><div class="line">lr = <span class="number">1</span></div><div class="line">w, b = np.zeros([<span class="number">1</span>,<span class="number">2</span>]), <span class="number">0</span></div><div class="line">print_var(w, <span class="string">'w'</span>)</div><div class="line">print_var(b, <span class="string">'b'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt;</div><div class="line">x:</div><div class="line"> [[3 4 1]</div><div class="line"> [3 3 1]] </div><div class="line">shape: (2, 3)</div><div class="line">y:</div><div class="line"> [ 1  1 -1] </div><div class="line">shape: (3,)</div><div class="line">    </div><div class="line">w:</div><div class="line"> [[ 0.  0.]] </div><div class="line">shape: (1, 2)</div><div class="line">b:</div><div class="line"> 0 </div><div class="line">shape:</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;定义$w \cdot x+b$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">wx_plus_b</span><span class="params">(x, w, b)</span>:</span></div><div class="line">    pred = np.dot(w, x) + b</div><div class="line">    <span class="keyword">return</span> pred</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;学习过程代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">all_True = <span class="keyword">False</span></div><div class="line">iter_num = <span class="number">0</span></div><div class="line"></div><div class="line"><span class="comment"># 不断迭代，直到所有样本被正确分类为止</span></div><div class="line"><span class="keyword">while</span> <span class="keyword">not</span> all_True:</div><div class="line">    iter_num += <span class="number">1</span></div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(x.shape[<span class="number">1</span>]):</div><div class="line">        </div><div class="line">        <span class="comment"># 取第i个样本</span></div><div class="line">        sample_x = x[:, i]</div><div class="line">        sample_y = y[i]</div><div class="line">        pred = wx_plus_b(sample_x, w, b)</div><div class="line">        </div><div class="line">        <span class="comment"># 若样本被正确分类则跳过</span></div><div class="line">        <span class="keyword">if</span> sample_y * pred &gt; <span class="number">0</span>:</div><div class="line">            <span class="keyword">continue</span></div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            <span class="comment"># 更新参数 w和b</span></div><div class="line">            w = w + lr * sample_y * sample_x</div><div class="line">            b = b + lr * sample_y</div><div class="line">            print(iter_num, <span class="string">' x_%s '</span>%(i+<span class="number">1</span>), <span class="string">' (%d,%d) '</span>%(w[<span class="number">0</span>,<span class="number">0</span>], w[<span class="number">0</span>,<span class="number">1</span>]), str(b).rjust(<span class="number">2</span>), <span class="string">'分类超平面: %dx1+%dx2%+d'</span>%(w[<span class="number">0</span>,<span class="number">0</span>], w[<span class="number">0</span>,<span class="number">1</span>], b))</div><div class="line">            <span class="keyword">break</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="comment"># 若全部被分类</span></div><div class="line">        all_True = <span class="keyword">True</span></div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt;</div><div class="line">1  x_1   (3,3)   1 分类超平面: 3x1+3x2+1</div><div class="line">2  x_3   (2,2)   0 分类超平面: 2x1+2x2+0</div><div class="line">3  x_3   (1,1)  -1 分类超平面: 1x1+1x2-1</div><div class="line">4  x_3   (0,0)  -2 分类超平面: 0x1+0x2-2</div><div class="line">5  x_1   (3,3)  -1 分类超平面: 3x1+3x2-1</div><div class="line">6  x_3   (2,2)  -2 分类超平面: 2x1+2x2-2</div><div class="line">7  x_3   (1,1)  -3 分类超平面: 1x1+1x2-3</div></pre></td></tr></table></figure>
+<h4 id="3-2-算法对偶形式"><a href="#3-2-算法对偶形式" class="headerlink" title="3.2 算法对偶形式"></a>3.2 算法对偶形式</h4><p>&emsp;&emsp;将参数$w,b$用实例的$x_i$和标记$y_i$的线性组合来表示，可得到算法的对偶形式。在算法3.1中，每次更新$w,b$都是通过找到误分类点$(x_i,y_i)$来更新，那么到了最后就可以将$w,b$ 可以表示为:<br>$$<br>w = \sum_{i=1}^N \alpha_iy_ix_i \\<br>b = \sum_{i=1}^N \alpha_iy_i<br>$$<br>&emsp;&emsp;其中$\alpha=(\alpha_1,\alpha_2,…,\alpha_N)^T$,$N$为样本个数。</p>
+<p>&emsp;&emsp;那么就有$w\cdot x + b=\sum_{i=1}^N \alpha_iy_ix_i \cdot x + b$，学习算法流程为：</p>
+<p>&emsp;学习算法流程为：</p>
+<p>&emsp;&emsp;<strong>输入</strong>：训练数据集合$T={ (x_1, y_1), (x_2,y_2),…(x_N,y_N)}$，学习率$\eta(0&lt;\eta \leq 1)$;</p>
+<p>&emsp;&emsp;<strong>输出</strong>：$\alpha,b$;感知机模型$f(x)=sign(\sum_{j=1}^N \alpha_jy_jx_j \cdot x + b)$。</p>
+<p>&emsp;&emsp;（1）初始化$\alpha=(0,0, …,0)^T,b = 0$</p>
+<p>&emsp;&emsp;（2）在训练集上选择数据$(x_i,y_i)$</p>
+<p>&emsp;&emsp;（3）如果$y_i(\sum_{j=1}^N \alpha_jy_jx_j \cdot x + b) \leq 0$<br>$$<br>\alpha_i \leftarrow  \alpha_i + \eta  \\<br>b \leftarrow b + \eta y_i<br>$$<br>&emsp;&emsp;（4）转至（2），知道全部分类正确。</p>
+<p>&emsp;&emsp;因为在对偶形式中训练实例都是以内积形式出现，所以预先计算所有的实例点之间的内积保存以来，可以大量减少计算时间，这个实例点内积的矩阵结果成为<strong>Gram</strong>矩阵<br>$$<br>G = [x_i \cdot x_j]_{N*N}<br>$$<br>&emsp;&emsp;下面为以例2.1为例的对偶形式的代码实现。</p>
+<p>&emsp;&emsp;首先先生成数据</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 例2.1 中的数据</span></div><div class="line">x = np.array([[<span class="number">3</span>, <span class="number">3</span>],[<span class="number">4</span>, <span class="number">3</span>], [<span class="number">1</span>, <span class="number">1</span>]]).T</div><div class="line">y = np.array([<span class="number">1</span>, <span class="number">1</span>, <span class="number">-1</span>])</div><div class="line">lr = <span class="number">1</span></div><div class="line"></div><div class="line">alpha = np.zeros(x.shape[<span class="number">1</span>])</div><div class="line">print_var(alpha, <span class="string">'alpha'</span>)</div><div class="line">b = <span class="number">0</span></div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; </div><div class="line">alpha:</div><div class="line"> [ 0.  0.  0.] </div><div class="line">shape: (3,)</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;计算Gram矩阵</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 首先先计算 Gram 矩阵，可由x点乘x的转置矩阵得到</span></div><div class="line">Gram = np.dot(x.T, x)</div><div class="line">print_var(Gram, <span class="string">'Gram'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt;</div><div class="line">Gram:</div><div class="line"> [[18 21  6]</div><div class="line"> [21 25  7]</div><div class="line"> [ 6  7  2]] </div><div class="line">shape: (3, 3)</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;定义$\sum_{j=1}^N \alpha_jy_jx_j \cdot x + b$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 对偶形式的计算方法</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">calc_dual</span><span class="params">(x_i_idx, alphas_j, ys_j, b)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    x_i_idx: 传入的样本的index</span></div><div class="line"><span class="string">    alphas_j: 所有alpha的值</span></div><div class="line"><span class="string">    ys_j: 所有y的值</span></div><div class="line"><span class="string">    """</span></div><div class="line">    pred = <span class="number">0</span></div><div class="line">    <span class="keyword">for</span> j, (y_j, alpha_j) <span class="keyword">in</span> enumerate(zip(ys_j, alphas_j)):</div><div class="line">        <span class="comment"># 从Gram矩阵中取出 x_j_i，并按照公式计算</span></div><div class="line">        x_j_i = Gram[x_i_idx, j]</div><div class="line">        pred += alpha_j * y_j * x_j_i</div><div class="line">    pred = pred + b</div><div class="line">    <span class="keyword">return</span> pred</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;学习过程代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">all_True = <span class="keyword">False</span></div><div class="line">iter_num = <span class="number">0</span></div><div class="line"><span class="keyword">while</span> <span class="keyword">not</span> all_True:</div><div class="line">    iter_num += <span class="number">1</span></div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(x.shape[<span class="number">1</span>]):</div><div class="line">        sample_y = y[i]</div><div class="line">        pred = calc_dual(i, alpha, y, b)</div><div class="line">        <span class="keyword">if</span> sample_y * pred &gt; <span class="number">0</span>:</div><div class="line">            <span class="keyword">continue</span></div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            <span class="comment"># 更新参数alpha和b</span></div><div class="line">            alpha[i] += lr</div><div class="line">            b += lr * sample_y</div><div class="line">            </div><div class="line">            <span class="comment"># 根据alpha和x,y计算w</span></div><div class="line">            w = (np.multiply(x, y) * alpha).sum(<span class="number">1</span>)</div><div class="line">            S = <span class="string">' 分类超平面: %dx1+%dx2%+d=0'</span>%(w[<span class="number">0</span>], w[<span class="number">1</span>], b)</div><div class="line">            </div><div class="line">            print(<span class="string">'k:%2d '</span>%iter_num, <span class="string">' x_%s '</span>%(i+<span class="number">1</span>), <span class="string">'a1:%2d  a2:%2d  a3:%2d  b:%+d'</span>%(*alpha, b), S)</div><div class="line">            </div><div class="line">            <span class="keyword">break</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        all_True = <span class="keyword">True</span></div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt;</div><div class="line">k: 1   x_1  a1: 1  a2: 0  a3: 0  b:+1  分类超平面: 3x1+3x2+1=0</div><div class="line">k: 2   x_3  a1: 1  a2: 0  a3: 1  b:+0  分类超平面: 2x1+2x2+0=0</div><div class="line">k: 3   x_3  a1: 1  a2: 0  a3: 2  b:-1  分类超平面: 1x1+1x2-1=0</div><div class="line">k: 4   x_3  a1: 1  a2: 0  a3: 3  b:-2  分类超平面: 0x1+0x2-2=0</div><div class="line">k: 5   x_1  a1: 2  a2: 0  a3: 3  b:-1  分类超平面: 3x1+3x2-1=0</div><div class="line">k: 6   x_3  a1: 2  a2: 0  a3: 4  b:-2  分类超平面: 2x1+2x2-2=0</div><div class="line">k: 7   x_3  a1: 2  a2: 0  a3: 5  b:-3  分类超平面: 1x1+1x2-3=0</div></pre></td></tr></table></figure>
+<h3 id="4-瞎谈"><a href="#4-瞎谈" class="headerlink" title="4 瞎谈"></a>4 瞎谈</h3><p>&emsp;&emsp;嗯，就这样，完整代码地址见<a href="https://github.com/jieguangzhou/TongJiXueXIFangFa/blob/master/%E6%84%9F%E7%9F%A5%E6%9C%BA.ipynb" target="_blank" rel="external">github</a>，尽管文章里面的代码已经是全的了。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/统计学习方法/" rel="tag"># 统计学习方法</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/19/Incorporating-Copying-Mechanism-in-Sequence-to-Sequence-Learning/" rel="next" title="Incorporating Copying Mechanism in Sequence-to-Sequence Learning">
+                <i class="fa fa-chevron-left"></i> Incorporating Copying Mechanism in Sequence-to-Sequence Learning
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">jieguangzhou</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#感知机——《统计学习方法》笔记"><span class="nav-number">1.</span> <span class="nav-text">感知机——《统计学习方法》笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-模型定义"><span class="nav-number">1.1.</span> <span class="nav-text">1 模型定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-损失函数"><span class="nav-number">1.2.</span> <span class="nav-text">2 损失函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-学习算法"><span class="nav-number">1.3.</span> <span class="nav-text">3 学习算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-算法原始形式"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 算法原始形式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-算法对偶形式"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 算法对偶形式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-瞎谈"><span class="nav-number">1.4.</span> <span class="nav-text">4 瞎谈</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jieguangzhou</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
